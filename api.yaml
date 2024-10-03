@@ -1,0 +1,1575 @@
+openapi: 3.0.0
+info:
+  title: Payment System
+  version: 1.0.0
+paths:
+  /api/v1/paymentLink/generated-payment-link:
+    post:
+      tags:
+        - Payment Link
+      summary: Generate a new payment link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GeneratedPaymentLink"
+      responses:
+        "200":
+          description: Successfully generated payment link
+          content:
+            application/json:
+              example: {}
+  /api/v1/paymentLink/{id}/cancel-payment-link:
+    patch:
+      tags:
+        - Payment Link
+      summary: Cancel a payment link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the payment link to be canceled
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelledPaymentLink"
+      responses:
+        "200":
+          description: Successfully canceled payment link
+          content:
+            application/json:
+              example: {}
+  /api/v1/paymentLink/{id}/edit-payment-link:
+    patch:
+      tags:
+        - Payment Link
+      summary: Edit a payment link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the payment link to be canceled
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leadName:
+                  type: string
+                leadEmail:
+                  type: string
+                leadCountryCode:
+                  type: string
+                leadPhone:
+                  type: string
+                paymentType:
+                  type: string
+              required:
+                - leadName
+                - leadEmail
+                - leadCountryCode
+                - leadPhone
+                - paymentType
+      responses:
+        "200":
+          description: Change requested sucessfully
+          content:
+            application/json:
+              example: {}
+  /api/v1/paymentLink/{id}/paid:
+    patch:
+      tags:
+        - Payment Link
+      summary: Change status to paid
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the payment link to be paid
+      responses:
+        "200":
+          description: Successfully changed status to paid
+          content:
+            application/json:
+              example: {}
+
+  /api/v1/paymentLink/{id}/share-payment-link:
+    patch:
+      tags:
+        - Payment Link
+      summary: Share a payment link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the payment link to be shared
+      requestBody:
+        # required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelledPaymentLink"
+      responses:
+        "200":
+          description: Successfully shared payment link
+          content:
+            application/json:
+              example: {}
+  /api/v1/paymentLink/{id}/regenerate-payment-link:
+    patch:
+      tags:
+        - Payment Link
+      summary: Update payment link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Update payment link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GeneratedPaymentLink"
+      responses:
+        "200":
+          description: Payment link updated successfully
+          content:
+            application/json:
+              example: {}
+  /api/v1/paymentLink/{id}/approval-status:
+    patch:
+      tags:
+        - Payment Link
+      summary: Update approval status of a payment link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the payment link to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApprovalStatusUpdate"
+      responses:
+        "200":
+          description: Successfully updated approval status
+          content:
+            application/json:
+              example: {}
+  /api/v1/paymentLink:
+    get:
+      tags:
+        - Payment Link
+      summary: Retrieve PaymentLinks based on filters
+      parameters:
+        - in: query
+          name: paymentLinkGeneratedStartDate
+          schema:
+            type: string
+            format: date
+          description: Start date for payment link generation
+        - in: query
+          name: paymentLinkGeneratedEndDate
+          schema:
+            type: string
+            format: date
+          description: End date for payment link generation
+        - in: query
+          name: paymentCaptureTimeStartDate
+          schema:
+            type: string
+            format: date
+          description: Start date for payment capture
+        - in: query
+          name: paymentCaptureTimeEndDate
+          schema:
+            type: string
+            format: date
+          description: End date for payment capture
+        - in: query
+          name: paymentLink
+          schema:
+            type: string
+          description: Payment link
+        - in: query
+          name: approvalStatus
+          schema:
+            type: string
+          description: Approval status
+        - in: query
+          name: channel
+          schema:
+            type: integer
+          description: Channel ID
+        - in: query
+          name: paymentType
+          schema:
+            type: string
+          description: Payment type
+        - in: query
+          name: course
+          schema:
+            type: integer
+          description: Course ID
+        - in: query
+          name: courseType
+          schema:
+            type: string
+          description: Course type
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+          description: Page number for pagination
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 1
+          description: Number of items per page
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search term
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: Status filter
+        - in: query
+          name: showFor
+          schema:
+            type: array
+            items:
+              type: integer
+          description: Show for filter (an array of IDs)
+      responses:
+        '200':
+          description: Successfully retrieved PaymentLinks
+          content:
+            application/json:
+              example:
+                docs:
+                  - _id: "1"
+                    _rev: "1"
+                    collectionName: "PaymentLink"
+                limit: 10
+                totalDocs: 100
+                page: 1
+                totalPages: 10
+                success: true
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: Internal Server Error
+
+  /api/v1/paymentLink/{id}/paymentversions:
+    get:
+      tags:
+        - Payment Link
+      summary: Retrieve All Versions of Paymentlink By Id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the payment link 
+        - in: query
+          name: rev
+          schema:
+            type: string
+          description: the Rev No of the Document
+        - in: query
+          name: fromDate
+          schema:
+            type: string
+          description: the fromDate of the Document
+        - in: query
+          name: toDate
+          schema:
+            type: string
+          description: the toDate of the Document
+      responses:
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: Internal Server Error
+
+  /api/v1/paymentLink/csvofpaymentlink:
+    get:
+      tags:
+        - Payment Link
+      summary: Retrieve Csv Doc
+      parameters:
+        - in: query
+          name: paymentLinkGeneratedStartDate
+          schema:
+            type: string
+            format: date
+          description: Start date for payment link generation
+        - in: query
+          name: paymentLinkGeneratedEndDate
+          schema:
+            type: string
+            format: date
+          description: End date for payment link generation
+        - in: query
+          name: paymentCaptureTimeStartDate
+          schema:
+            type: string
+            format: date
+          description: Start date for payment capture
+        - in: query
+          name: paymentCaptureTimeEndDate
+          schema:
+            type: string
+            format: date
+          description: End date for payment capture
+        - in: query
+          name: paymentLink
+          schema:
+            type: string
+          description: Payment link
+        - in: query
+          name: approvalStatus
+          schema:
+            type: string
+          description: Approval status
+        - in: query
+          name: channel
+          schema:
+            type: integer
+          description: Channel ID
+        - in: query
+          name: paymentType
+          schema:
+            type: string
+          description: Payment type
+        - in: query
+          name: course
+          schema:
+            type: integer
+          description: Course ID
+        - in: query
+          name: courseType
+          schema:
+            type: string
+          description: Course type
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search term
+      responses:
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: Internal Server Error
+  /api/v1/paymentLink/{id}/send-to-revenueSystem:
+    post:
+      tags:
+        - Payment Link
+      summary: Send order information to the revenue system
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the payment link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                country_code:
+                  type: string
+                lawsikho_order_id:
+                  type: string
+                enrollmentId:
+                  type: string
+                course_type:
+                  type: string
+                fee_paid:
+                  type: number
+                transaction_id:
+                  type: string
+                brand_id:
+                  type: number
+                enrollmentPlanId:
+                  type: string
+                payment_type:
+                  type: number
+                modeOfPayment:
+                  type: number
+                paymentCapturedInfo:
+                  type: object
+                  properties:
+                    gatewayName:
+                      type: string
+                    gatewayOrderRef:
+                      type: string
+                    gatewayPaymentRef:
+                      type: string
+                    otherInfo:
+                      type: object  # Adjust the type accordingly
+                    updatedFrom:
+                      type: string
+      responses:
+        '200':
+          description: Order created successfully in the revenue system
+          content:
+            application/json:
+              example:
+                success: true
+                message: Order created successfully in the revenue system
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                success: false
+                message: Internal server error
+  # approve reject edit payment link
+  /api/v1/paymentLink/{id}/edit-approve-reject:
+    post:
+      tags:
+        - Payment Link
+      summary: approve or reject edit payment list.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Bearer token
+          required: true
+          type: string
+        - in: path
+          name: id
+          description: ID of the edit payment link object
+          required: true
+          type: string
+        - in: body
+          name: user
+          description: To approve and reject.
+          schema:
+            type: object
+            required:
+              - action
+              - message        
+            properties:
+              action:
+                type: string
+              message:
+                type: string
+      responses:
+        200:
+          description: "Edit approve reject list successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Edit approve reject list successfully"
+              data:
+                type: array
+                description: List of courses
+        404:
+          description: Payment link not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Payment link not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+  
+  # get edit pending list
+  /api/v1/paymentLink/edit/pendinglist:
+    get:
+      tags:
+        - Payment Link
+      summary: Get a edit pending list of Payment Link 
+      parameters:
+        - in: header
+          name: Authorization
+          description: Bearer token
+          required: true
+          type: string
+        - name: page
+          in: query
+          description: Page number for pagination (default: 1)
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Number of items to return per page (default: 10)
+          schema:
+            type: integer
+        - name: search
+          in: query
+          description: Search term to filter results
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                message:
+                type: string
+                example: "got last updated time"
+                error:
+                type: boolean
+                example: false
+                  # Add more referral links as needed
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                message: "Internal server error"
+                error: "Error details here"
+  # get course list
+  /api/v1/external/getcourse/{channelId}:
+    get:
+      tags:
+        - External APIs
+      summary: Get Course list by Channel ID.
+      parameters:
+        - in: path
+          name: channelId
+          description: ID of the channel for which to retrieve the course plan
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Course list successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got Course list successfully"
+              data:
+                type: array
+                description: List of courses
+        404:
+          description: Course not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Course not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+  # get package list
+  /api/v1/external/getpackage/{channelId}:
+    get:
+      tags:
+        - External APIs
+      summary: Get Package list by Channel ID.
+      parameters:
+        - in: path
+          name: channelId
+          description: ID of the channel for which to retrieve the course plan
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Package list successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got Package list successfully"
+              data:
+                type: array
+                description: List of packages
+        404:
+          description: Package not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Package not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+  # get Bootcamp list
+  /api/v1/external/getbootcamp/{channelId}:
+    get:
+      tags:
+        - External APIs
+      summary: Get Bootcamp list by Channel ID.
+      parameters:
+        - in: path
+          name: channelId
+          description: ID of the channel for which to retrieve the course plan
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Bootcamp list successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got Bootcamp list successfully"
+              data:
+                type: array
+                description: List of bootcamps
+        404:
+          description: Bootcamp not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Bootcamp not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+  # get sales Caller list
+  /api/v1/external/getsalescaller:
+    get:
+      tags:
+        - External APIs
+      summary: Get Sales Caller list.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Bearer token
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Sales Caller list successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got Sales Caller list successfully"
+              data:
+                type: array
+                description: List of sales callers
+        404:
+          description: Sales Caller list not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Sales Caller list not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+  # get payment type list
+  /api/v1/external/getpaymenttype:
+    get:
+      tags:
+        - External APIs
+      summary: Get Payment type list.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Bearer token
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Payment Link list successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got payment link list successfully"
+              data:
+                type: array
+                description: List of payment links
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+              err:
+                type: string
+                example: "Error message from the server"
+  # get course plan by course id
+  /api/v1/external/getCoursePlan/{courseId}/{channelId}:
+    get:
+      tags:
+        - External APIs
+      summary: Get Course Plan by Course ID
+      parameters:
+        - in: path
+          name: courseId
+          description: ID of the course for which to retrieve the course plan
+          required: true
+          type: string
+        - in: path
+          name: channelId
+          description: ID of the channel for which to retrieve the course plan
+          required: true
+          type: string
+        - in: header
+          name: authorization
+          description: Authorization token for authentication
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Course Plan successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got Course Plan successfully"
+              data:
+                type: object # Adjust the schema based on the actual structure of your course plan data
+                description: Course plan details
+        404:
+          description: Course or plan not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Course or plan not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+              err:
+                type: string
+                example: "Error message from the server"
+  # get package plan by package id
+  /api/v1/external/getPackagePlan/{packageId}/{channelId}:
+    get:
+      tags:
+        - External APIs
+      summary: Get Package Plan by Package ID
+      parameters:
+        - in: path
+          name: packageId
+          description: ID of the package for which to retrieve the package plan
+          required: true
+          type: string
+        - in: path
+          name: channelid
+          description: Channel ID for filtering packages.
+          required: true
+          type: string
+        - in: header
+          name: authorization
+          description: Authorization token for authentication
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Package Plan successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got Package Plan successfully"
+              data:
+                type: object # Adjust the schema based on the actual structure of your package plan data
+                description: Package plan details
+        404:
+          description: Package or plan not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Package or plan not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+              err:
+                type: string
+                example: "Error message from the server"
+  # get course price
+  /api/v1/external/getCoursePrice:
+    get:
+      tags:
+        - External APIs
+      summary: Get Course Price
+      parameters:
+        - in: query
+          name: channelid
+          description: channelid for which to retrieve the course price
+          type: string
+        - in: query
+          name: courseId
+          description: ID of the course for which to retrieve the price
+          type: string
+        - in: query
+          name: coursePlanId
+          description: ID of the course plan for which to retrieve the price
+          type: string
+        - in: query
+          name: courseType
+          description: Type of the course for which to retrieve the price
+          type: string
+        - in: header
+          name: authorization
+          description: Authorization token for authentication
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Got Course Price successfully"
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Got Course Price successfully"
+              data:
+                type: object # Adjust the schema based on the actual structure of your course price data
+                description: Course price details
+        404:
+          description: Course or price not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Course or price not found!!"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              error:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Internal Server Error"
+              err:
+                type: string
+                example: "Error message from the server"
+
+
+  # Generate and Share
+  /api/v1/shareviaemail/generateandshare:
+    post:
+      tags:
+        - Share via Email
+      summary: Share Link via Email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateAndShareLink"
+      
+      responses:
+        201:
+          description: "Got Course list successfully"
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Sharing Info Created Successfully"
+        404:
+          description: Sharing info Not Created"
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Sharing info Not Created"
+        500:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Internal Server Error"
+
+
+components:
+  schemas:
+    GeneratedPaymentLink:
+      type: object
+      properties:
+        lead:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+          required:
+            - name
+            - email
+            - phone
+        # payee:
+        #   type: object
+        #   properties:
+        #     name:
+        #       type: string
+        #     email:
+        #       type: string
+        #       format: email
+        #     phone:
+        #       type: object
+        #       properties:
+        #         countryCode:
+        #           type: number
+        #         phoneNo:
+        #           type: number
+        #         contactedNumber:
+        #           type: string
+        #   required:
+        #     - name
+        #     - email
+        #     - phone
+        channelInfo:
+          type: object
+        courseType:
+          type: string
+          enum: ["standalone", "package", "bootcamp"]
+        courseInfo:
+          type: object
+          properties:
+            lsSaId:
+              type: number
+            apId:
+              type: number
+            label:
+              type: string
+        coursePlanInfo:
+          type: object
+        price:
+          type: object
+          properties:
+            originalPrice:
+              type: number
+            salesPrice:
+              type: number
+            paymentToBeCollected:
+              type: number
+            paymentType:
+              type: string
+        paymentCollectedBy:
+          type: object
+          properties:
+            refId:
+              type: number
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+            # phone:
+            #   type: object
+            #   properties:
+            #     countryCode:
+            #       type: number
+            #     phoneNo:
+            #       type: number
+            #     contactedNumber:
+            #       type: string
+        # linkGeneratedBy:
+        #   type: object
+        #   properties:
+        #     refId:
+        #       type: number
+        #     name:
+        #       type: string
+        #     email:
+        #       type: string
+        #       format: email
+        #     phone:
+        #       type: object
+        #       properties:
+        #         countryCode:
+        #           type: number
+        #         phoneNo:
+        #           type: number
+        #         contactedNumber:
+        #           type: string
+        #     otherInfo:
+        #       type: object
+        # selectedPaymentGateways:
+        #   type: array
+        #   items:
+        #     type: string
+        paymentCapturedInfo:
+          type: object
+          properties:
+            gatewayName:
+              type: string
+            gatewayOrderRef:
+              type: string
+            gatewayPaymentRef:
+              type: string
+            otherInfo:
+              type: object
+            updatedFrom:
+              type: string
+              enum: ["instant", "webhook"]
+        # paymentLink:
+        #   type: string
+        # paymentLinkGeneratedTime:
+        #   type: string
+        #   format: date-time
+        paymentLinkExpireTime:
+          type: string
+          format: date-time
+        # paymentCaptureTime:
+        #   type: string
+        #   format: date-time
+        # currentStatus:
+        #   type: array
+        #   items:
+        #     type: string
+        #     enum:
+        #       [
+        #         "generated",
+        #         "shared",
+        #         "paid",
+        #         "expired",
+        #         "initiated",
+        #         "error",
+        #         "cancelled",
+        #       ]
+        # statusChangeHistory:
+        #   type: array
+        #   items:
+        #     type: object
+        #     properties:
+        #       statusName:
+        #         type: string
+        #       changeTime:
+        #         type: string
+        #         format: date-time
+        #       changedBy:
+        #         type: object
+        #         properties:
+        #           refId:
+        #             type: number
+        #           name:
+        #             type: string
+        #           email:
+        #             type: string
+        #             format: email
+        #           phone:
+        #             type: object
+        #             properties:
+        #               countryCode:
+        #                 type: number
+        #               phoneNo:
+        #                 type: number
+        #               contactedNumber:
+        #                 type: string
+        #           otherInfo:
+        #             type: object
+        #       message:
+        #         type: object
+        #         properties:
+        #           code:
+        #             type: string
+        #           text:
+        #             type: string
+        # approvalStatus:
+        #   type: array
+        #   items:
+        #     type: string
+        #     enum: ["approved", "rejected", "pending", "na"]
+        # approvalStatusChangeHistory:
+        #   type: object
+        #   properties:
+        #     statusName:
+        #       type: string
+        #     changeTime:
+        #       type: string
+        #       format: date-time
+        #     changedBy:
+        #       type: object
+        #       properties:
+        #         refId:
+        #           type: number
+        #         name:
+        #           type: string
+        #         email:
+        #           type: string
+        #           format: email
+        #         phone:
+        #           type: object
+        #           properties:
+        #             countryCode:
+        #               type: number
+        #             phoneNo:
+        #               type: number
+        #             contactedNumber:
+        #               type: string
+        #         otherInfo:
+        #           type: object
+        #     message:
+        #       type: object
+        #       properties:
+        #         code:
+        #           type: string
+        #         text:
+        #           type: string
+        pageContent:
+          type: string
+          required: true
+
+    ApprovalStatusUpdate:
+      type: object
+      properties:
+        approvalStatus:
+          type: string
+          enum: ["approved", "rejected"]
+        message:
+          type: string
+
+    CancelledPaymentLink:
+      type: object
+      properties:
+        changeTime:
+          type: string
+          format: date-time
+        changedBy: 
+          type: object
+          properties:
+            refId:
+              type: number
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: object
+              properties: 
+                countryCode:
+                  type: number
+                phoneNo: 
+                  type: number
+                contactedNUmber:
+                  type: string
+        otherInfo:
+          type: object
+        message:
+          type: object
+          properties: 
+            code:
+              type: string
+            text: 
+              text: string
+
+    GenerateAndShareLink:
+      type: object
+      properties:
+        properties:
+        lead:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+          required:
+            - name
+            - email
+            - phone
+        # payee:
+        #   type: object
+        #   properties:
+        #     name:
+        #       type: string
+        #     email:
+        #       type: string
+        #       format: email
+        #     phone:
+        #       type: object
+        #       properties:
+        #         countryCode:
+        #           type: number
+        #         phoneNo:
+        #           type: number
+        #         contactedNumber:
+        #           type: string
+        #   required:
+        #     - name
+        #     - email
+        #     - phone
+        channelInfo:
+          type: object
+        courseType:
+          type: string
+          enum: ["standalone", "package", "bootcamp"]
+        courseInfo:
+          type: object
+          properties:
+            lsSaId:
+              type: number
+            apId:
+              type: number
+            label:
+              type: string
+        coursePlanInfo:
+          type: object
+        price:
+          type: object
+          properties:
+            originalPrice:
+              type: number
+            salesPrice:
+              type: number
+            paymentToBeCollected:
+              type: number
+            paymentType:
+              type: string
+        paymentCollectedBy:
+          type: object
+          properties:
+            refId:
+              type: number
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+            # phone:
+            #   type: object
+            #   properties:
+            #     countryCode:
+            #       type: number
+            #     phoneNo:
+            #       type: number
+            #     contactedNumber:
+            #       type: string
+        # linkGeneratedBy:
+        #   type: object
+        #   properties:
+        #     refId:
+        #       type: number
+        #     name:
+        #       type: string
+        #     email:
+        #       type: string
+        #       format: email
+        #     phone:
+        #       type: object
+        #       properties:
+        #         countryCode:
+        #           type: number
+        #         phoneNo:
+        #           type: number
+        #         contactedNumber:
+        #           type: string
+        #     otherInfo:
+        #       type: object
+        # selectedPaymentGateways:
+        #   type: array
+        #   items:
+        #     type: string
+        paymentCapturedInfo:
+          type: object
+          properties:
+            gatewayName:
+              type: string
+            gatewayOrderRef:
+              type: string
+            gatewayPaymentRef:
+              type: string
+            otherInfo:
+              type: object
+            updatedFrom:
+              type: string
+              enum: ["instant", "webhook"]
+        # paymentLink:
+        #   type: string
+        # paymentLinkGeneratedTime:
+        #   type: string
+        #   format: date-time
+        paymentLinkExpireTime:
+          type: string
+          format: date-time
+        # paymentCaptureTime:
+        #   type: string
+        #   format: date-time
+        # currentStatus:
+        #   type: array
+        #   items:
+        #     type: string
+        #     enum:
+        #       [
+        #         "generated",
+        #         "shared",
+        #         "paid",
+        #         "expired",
+        #         "initiated",
+        #         "error",
+        #         "cancelled",
+        #       ]
+        # statusChangeHistory:
+        #   type: array
+        #   items:
+        #     type: object
+        #     properties:
+        #       statusName:
+        #         type: string
+        #       changeTime:
+        #         type: string
+        #         format: date-time
+        #       changedBy:
+        #         type: object
+        #         properties:
+        #           refId:
+        #             type: number
+        #           name:
+        #             type: string
+        #           email:
+        #             type: string
+        #             format: email
+        #           phone:
+        #             type: object
+        #             properties:
+        #               countryCode:
+        #                 type: number
+        #               phoneNo:
+        #                 type: number
+        #               contactedNumber:
+        #                 type: string
+        #           otherInfo:
+        #             type: object
+        #       message:
+        #         type: object
+        #         properties:
+        #           code:
+        #             type: string
+        #           text:
+        #             type: string
+        # approvalStatus:
+        #   type: array
+        #   items:
+        #     type: string
+        #     enum: ["approved", "rejected", "pending", "na"]
+        # approvalStatusChangeHistory:
+        #   type: object
+        #   properties:
+        #     statusName:
+        #       type: string
+        #     changeTime:
+        #       type: string
+        #       format: date-time
+        #     changedBy:
+        #       type: object
+        #       properties:
+        #         refId:
+        #           type: number
+        #         name:
+        #           type: string
+        #         email:
+        #           type: string
+        #           format: email
+        #         phone:
+        #           type: object
+        #           properties:
+        #             countryCode:
+        #               type: number
+        #             phoneNo:
+        #               type: number
+        #             contactedNumber:
+        #               type: string
+        #         otherInfo:
+        #           type: object
+        #     message:
+        #       type: object
+        #       properties:
+        #         code:
+        #           type: string
+        #         text:
+        #           type: string
+        pageContent:
+            type: string
+            required: true
+        sharingEmail: 
+          type: string
+      
+       
+            
+
+        
+           
